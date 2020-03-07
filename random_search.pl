@@ -1,5 +1,6 @@
 :- use_module(motion).
 :- use_module(navigation).
+% -----------------
 
 start :-
     [map],
@@ -7,6 +8,7 @@ start :-
     retract(visited([0, 0])),
     write_visited,
     halt.
+% -----------------
 
 move(I, Current) :-
     I > 0,
@@ -52,3 +54,5 @@ fly(Direction, Current, Result) :-
 fly(_, Current, Current) :-
     alive(Current),
     human(Current).
+
+% -----------------
