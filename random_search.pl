@@ -2,9 +2,11 @@
 :- use_module(navigation).
 
 start :-
+    [map],
     move(100, [0, 0]),
     retract(visited([0, 0])),
-    write_visited.
+    write_visited,
+    halt.
 
 move(I, Current) :-
     I > 0,

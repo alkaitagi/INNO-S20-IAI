@@ -1,17 +1,14 @@
 :- module(navigation, [
-        map/2,
         human/1,
-        human/2,
         ork/1,
-        ork/2,
         touchdown/1,
-        touchdown/2,
         alive/1,
         visited/1,
         write_visited/0
     ]).
 
 :- use_module(motion).
+:- use_module(map).
 :- dynamic
     visited/1,
     human/1.
@@ -42,26 +39,19 @@ write_step(From, To) :-
 % ------------------
 
 human([X, Y]) :-
-    human(X, Y).
+    h(X, Y).
 
 ork([X, Y]) :-
-    ork(X, Y).
+    o(X, Y).
 
 touchdown([X, Y]) :-
-    touchdown(X, Y).
+    t(X, Y).
 
 alive([X, Y]) :-
-    \+ ork(X, Y),
+    \+ o(X, Y),
     X>=0,Y>=0,
-    map(U, V),
+    m(U, V),
     X=<U, Y=<V.
 
 
-% ------------------
-
-
-map(2, 2).
-
-human(0, 1).
-ork(1, 0).
-touchdown(1, 1).
+% -----------------

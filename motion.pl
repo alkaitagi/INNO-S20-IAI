@@ -103,3 +103,5 @@ is_step(From, To) :-
 are_equal([X, Y], [U, V]) :-
     X =:= U,
     Y =:= V.
+
+% ------------------
