@@ -48,8 +48,8 @@ touchdown([X, Y]) :-
 alive([X, Y]) :-
     \+ o(X, Y),
     X>=0,Y>=0,
-    m(U, V),
-    X=<U, Y=<V.
+    m(M),
+    X<M, Y<M.
 
 
 % -----------------
