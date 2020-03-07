@@ -44,45 +44,21 @@ up_left([X, Y], [U, V]) :-
 
 % ------------------
 
-step(0, Point, Result) :-
-    up(Point, Result).
+step(Direction, Point, Result) :-
+    (Direction =:= 0 -> up(Point, Result)
+    ;Direction =:= 1 -> right(Point, Result)
+    ;Direction =:= 2 -> down(Point, Result)
+    ;Direction =:= 3 -> left(Point, Result)).
 
-step(1, Point, Result) :-
-    right(Point, Result).
-
-step(2, Point, Result) :-
-    down(Point, Result).
-
-step(3, Point, Result) :-
-    left(Point, Result).
-
-% ------------------
-
-toss(0, Point, Result) :-
-    up(Point, Result).
-
-toss(1, Point, Result) :-
-    up_right(Point, Result).
-
-toss(2, Point, Result) :-
-    right(Point, Result).
-
-toss(3, Point, Result) :-
-    down_right(Point, Result).
-
-toss(4, Point, Result) :-
-    down(Point, Result).
-
-toss(5, Point, Result) :-
-    down_left(Point, Result).
-
-toss(6, Point, Result) :-
-    left(Point, Result).
-
-toss(7, Point, Result) :-
-    up_left(Point, Result).
-
-% ------------------
+toss(Direction, Point, Result) :-
+    (Direction =:= 0 -> up(Point, Result)
+    ;Direction =:= 1 -> up_right(Point, Result)
+    ;Direction =:= 2 -> right(Point, Result)
+    ;Direction =:= 3 -> down_right(Point, Result)
+    ;Direction =:= 4 -> down(Point, Result)
+    ;Direction =:= 5 -> down_left(Point, Result)
+    ;Direction =:= 6 -> left(Point, Result)
+    ;Direction =:= 7 -> up_left(Point, Result)).
 
 is_step(From, To) :-
     between(0, 3, Direction),

@@ -9,8 +9,7 @@ start :-
         retract(visited([0, 0])),
         write_visited
     ;
-        format('Could not solve~n')
-    ),
+        format('Could not solve~n')),
     statistics(walltime, [_ | [Time]]),
     format("~w msec~n", [Time]),
     halt.
@@ -27,7 +26,7 @@ move(I, Current) :-
     I > 0,
     alive(Current),
     \+ touchdown(Current),
-    random(0, 2, Direction),
+    random(0, 12, Direction),
     navigate(Direction, Current, Next),
     J is I - 1,
     move(J, Next),
