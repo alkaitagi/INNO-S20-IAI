@@ -1,4 +1,5 @@
 :- module(navigation, [
+        ball/1,
         human/1,
         ork/1,
         touchdown/1,
@@ -19,21 +20,20 @@
 write_visited :-
     findall(Point, visited(Point), Visited),
     length(Visited, Len),
-    format('~w~n', [Len]),
+    N is Len - 1,
+    format('~w~n', [N]),
     write_visited(Visited).
 
-write_visited([A]) :-
-    write_step([1, 1], A).
+write_visited([Current, [X, Y] | Path]) :-
+    (is_step(Current, [X, Y]) -> true ; write('P ')),
+    format('~w ~w~n', [X, Y]),
+    write_visited([[X, Y] | Path]).
 
-write_visited([A, B | C]) :-
-    write_visited([B | C]),
-    write_step(B, A).
-
-write_step([X, Y], [U, V]) :-
-    (\+ is_step([X, Y], [U, V]) -> write('P '); true),
-    format('~w ~w~n', [U, V]).
-
+write_visited([_]).
 % ------------------
+
+ball([X, Y]) :-
+    b(X, Y).
 
 human([X, Y]) :-
     h(X, Y).
@@ -53,15 +53,14 @@ alive([X, Y]) :-
 % -----------------
 
 navigate(Direction, Current, Next) :-
-    Direction < 4,
-    step(Direction, Current, Next).
-
-navigate(Direction, Current, Next) :-
-    Direction >= 4,
-    Throw is Direction - 4,
-    fly(Throw, Current, Next),
-    assert(human(Current)),
-    retract(human(Next)).
+    (Direction < 4 ->
+        step(Direction, Current, Next)
+    ;
+        Throw is Direction - 4,
+        fly(Throw, Current, Next),
+        assert(human(Current)),
+        retract(human(Next))
+    ).
 
 fly(Direction, Current, Result) :-
     alive(Current),
