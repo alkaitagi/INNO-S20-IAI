@@ -28,13 +28,10 @@ write_visited([A, B | C]) :-
     write_visited([B | C]),
     write_step(B, A).
 
-write_step(From, To) :-
-    is_step(From, To),
-    format('~w~n', [To]).
-
-write_step(From, To) :-
-    \+ is_step(From, To),
-    format('P ~w~n', [To]).
+write_step([X, Y], [U, V]) :-
+    (\+ is_step([X, Y], [U, V]),
+    write('P'));
+    format('~w ~w~n', [U, V]).
 
 % ------------------
 
@@ -55,3 +52,35 @@ alive([X, Y]) :-
 
 
 % -----------------
+
+% navigate(Direction, I, Current, J, Next) :-
+%     Direction < 4,
+%     human(Current),
+%     J is I,
+%     step(Direction, Current, Next).
+
+% navigate(Direction, I, Current, J, Next) :-
+%     Direction < 4,
+%     \+ human(Current),
+%     J is I - 1,
+%     step(Direction, Current, Next).
+
+% navigate(Direction, I, Current, J, Next) :-
+%     Direction >= 4,
+%     Throw is Direction - 4,
+%     fly(Throw, Current, Next),
+%     J is I - 1,
+%     assert(human(Current)),
+%     retract(human(Next)).
+
+% fly(Direction, Current, Result) :-
+%     alive(Current),
+%     \+ human(Current),
+%     toss(Direction, Current, Next),
+%     fly(Direction, Next, Result).
+
+% fly(_, Current, Current) :-
+%     alive(Current),
+%     human(Current).
+
+% % -----------------

@@ -11,6 +11,12 @@ start :-
 % -----------------
 
 move(I, Current) :-
+    I >= 0,
+    alive(Current),
+    touchdown(Current),
+    assert(visited(Current)).
+
+move(I, Current) :-
     I > 0,
     alive(Current),
     \+ touchdown(Current),
@@ -19,22 +25,10 @@ move(I, Current) :-
     move(J, Next),
     assert(visited(Current)).
 
-move(I, Current) :-
-    I >= 0,
-    alive(Current),
-    touchdown(Current),
-    assert(visited(Current)).
-
 navigate(Direction, I, Current, J, Next) :-
     Direction < 4,
-    human(Current),
-    J is I,
-    step(Direction, Current, Next).
-
-navigate(Direction, I, Current, J, Next) :-
-    Direction < 4,
-    \+ human(Current),
-    J is I - 1,
+    ((human(Current), J is I);
+    (\+ human(Current), J is I - 1)),
     step(Direction, Current, Next).
 
 navigate(Direction, I, Current, J, Next) :-
@@ -45,14 +39,14 @@ navigate(Direction, I, Current, J, Next) :-
     assert(human(Current)),
     retract(human(Next)).
 
+fly(_, Current, Current) :-
+    alive(Current),
+    human(Current).
+
 fly(Direction, Current, Result) :-
     alive(Current),
     \+ human(Current),
     toss(Direction, Current, Next),
     fly(Direction, Next, Result).
-
-fly(_, Current, Current) :-
-    alive(Current),
-    human(Current).
 
 % -----------------

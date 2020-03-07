@@ -85,23 +85,7 @@ toss(7, Point, Result) :-
 % ------------------
 
 is_step(From, To) :-
-    step(0, From, Step),
-    are_equal(To, Step).
-
-is_step(From, To) :-
-    step(1, From, Step),
-    are_equal(To, Step).
-
-is_step(From, To) :-
-    step(2, From, Step),
-    are_equal(To, Step).
-
-is_step(From, To) :-
-    step(3, From, Step),
-    are_equal(To, Step).
-
-are_equal([X, Y], [U, V]) :-
-    X =:= U,
-    Y =:= V.
+    between(0, 3, Direction),
+    step(Direction, From, To).
 
 % ------------------
