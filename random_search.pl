@@ -4,12 +4,16 @@
 
 start :-
     [map],
-    ((move(100, [0, 0]),
-    retract(visited([0, 0])),
-    write_visited,
-    halt);
-    (format('Not solvable~n'),
-    halt)).
+    statistics(walltime, _),
+    (move(100, [0, 0]) ->
+        retract(visited([0, 0])),
+        write_visited
+    ;
+        format('Could not solve~n')
+    ),
+    statistics(walltime, [_ | [Time]]),
+    format("~w msec~n", [Time]),
+    halt.
 
 % -----------------
 
@@ -21,13 +25,12 @@ move(I, Current) :-
 
 move(I, Current) :-
     I > 0,
-    J is I - 1,
     alive(Current),
     \+ touchdown(Current),
-    random(0, 12, Direction),
+    random(0, 2, Direction),
     navigate(Direction, Current, Next),
+    J is I - 1,
     move(J, Next),
     assert(visited(Current)).
-
 
 % -----------------

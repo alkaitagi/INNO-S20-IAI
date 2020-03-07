@@ -30,8 +30,7 @@ write_visited([A, B | C]) :-
     write_step(B, A).
 
 write_step([X, Y], [U, V]) :-
-    (\+ is_step([X, Y], [U, V]),
-    write('P'));
+    (\+ is_step([X, Y], [U, V]) -> write('P '); true),
     format('~w ~w~n', [U, V]).
 
 % ------------------
@@ -48,9 +47,8 @@ touchdown([X, Y]) :-
 alive([X, Y]) :-
     \+ o(X, Y),
     X>=0,Y>=0,
-    m(M),
-    X<M, Y<M.
-
+    m(W, H),
+    X<W, Y<H.
 
 % -----------------
 
