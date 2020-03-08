@@ -9,9 +9,10 @@
         navigate/3
     ]).
 
-:- use_module(motion).
-:- use_module(map).
+:- use_module(core/motion).
+:- use_module(core/map).
 :- dynamic
+    human/1,
     visited/1.
 
 % ------------------

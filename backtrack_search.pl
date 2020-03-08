@@ -18,7 +18,13 @@ move(Current) :-
         between(0, 12, Direction),
         navigate(Direction, Current, Next),
         \+ visited(Next),
-        move(Next)
+        (human(Current) ->
+            retract(human(Current)),
+            move(Next),
+            assert(human(Current))
+        ;
+            move(Next)
+        )
     ),
     retract(visited(Current)).
 

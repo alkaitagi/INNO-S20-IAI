@@ -19,6 +19,7 @@ move(I, Current) :-
         random(0, 12, Direction),
         navigate(Direction, Current, Next),
         J is I - 1,
+        (human(Current) -> retract(human(Current)) ; true),
         move(J, Next)
     ).
 

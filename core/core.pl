@@ -1,2 +1,2 @@
-:- use_module(navigation).
-:- consult(map).
+:- use_module(core/navigation).
+:- consult(core/map).
