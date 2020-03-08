@@ -1,5 +1,5 @@
 :- consult(core/core).
-% -----------------
+% ---------------
 
 start :-
     statistics(walltime, _),
@@ -30,4 +30,4 @@ move(Current) :-
     ),
     retract(visited(Current)).
 
-% -----------------
+% ---------------

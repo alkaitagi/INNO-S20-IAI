@@ -12,7 +12,7 @@
         is_step/2
     ]).
 
-% ------------------
+% ----------------
 
 up([X, Y], [X, V]) :-
     V is Y + 1.
@@ -42,7 +42,7 @@ up_left([X, Y], [U, V]) :-
     U is X - 1,
     V is Y + 1.
 
-% ------------------
+% ----------------
 
 step(Direction, Point, Result) :-
     (Direction =:= 0 -> up(Point, Result)
@@ -64,4 +64,4 @@ is_step(From, To) :-
     between(0, 3, Direction),
     step(Direction, From, To).
 
-% ------------------
+% ----------------

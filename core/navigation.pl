@@ -6,7 +6,10 @@
         alive/1,
         visited/1,
         write_visited/0,
-        navigate/3
+        navigate/3,
+        distance/3,
+        touchdown_distance/2,
+        ball_distance/2
     ]).
 
 :- use_module(core/motion).
@@ -15,7 +18,7 @@
     human/1,
     visited/1.
 
-% ------------------
+% ----------------
 
 write_visited :-
     findall(Point, visited(Point), Visited),
@@ -30,7 +33,7 @@ write_visited([Current, [X, Y] | Path]) :-
     write_visited([[X, Y] | Path]).
 
 write_visited([_]).
-% ------------------
+% ----------------
 
 ball([X, Y]) :-
     b(X, Y).
@@ -50,7 +53,20 @@ alive([X, Y]) :-
     m(W, H),
     X<W, Y<H.
 
-% -----------------
+% ---------------
+
+distance(X, Y, D) :-
+    D is X * X + Y * Y.
+
+touchdown_distance(X, D) :-
+    touchdown(T),
+    distance(X, T, D).
+
+ball_distance(X, D) :-
+    ball(B),
+    distance(X, B, D).
+
+% ---------------
 
 navigate(Direction, Current, Next) :-
     (Direction < 4 ->
@@ -70,4 +86,4 @@ fly(_, Current, Current) :-
     alive(Current),
     human(Current).
 
-% -----------------
+% ---------------
