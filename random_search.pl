@@ -2,7 +2,6 @@
 % -----------------
 
 start :-
-    [map],
     statistics(walltime, _),
     ball(Ball),
     (move(100, Ball) -> true ; format("Could not solve~n")),
