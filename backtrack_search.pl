@@ -1,9 +1,7 @@
-:- use_module(motion).
-:- use_module(navigation).
+:- consult(core/core).
 % -----------------
 
 start :-
-    [map],
     statistics(walltime, _),
     ball(Ball),
     (move(Ball) -> true ; format("Could not solve~n")),

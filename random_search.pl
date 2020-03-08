@@ -1,5 +1,4 @@
-:- use_module(motion).
-:- use_module(navigation).
+:- consult(core/core).
 % -----------------
 
 start :-
