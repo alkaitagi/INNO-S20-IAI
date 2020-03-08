@@ -12,8 +12,7 @@
 :- use_module(motion).
 :- use_module(map).
 :- dynamic
-    visited/1,
-    human/1.
+    visited/1.
 
 % ------------------
 
@@ -57,9 +56,7 @@ navigate(Direction, Current, Next) :-
         step(Direction, Current, Next)
     ;
         Throw is Direction - 4,
-        fly(Throw, Current, Next),
-        assert(human(Current)),
-        retract(human(Next))
+        fly(Throw, Current, Next)
     ).
 
 fly(Direction, Current, Result) :-
