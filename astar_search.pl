@@ -21,10 +21,8 @@ search(Current) :-
     (touchdown(Current) ->
         retractall(visited(_)),
         link_visited(Current),
-        write_visited
+        trace_visited(Output, Count)
     ;
-        write("Current: "),
-        writeln(Current),
         (
             (update_pending(0, Current) ; true),
             (update_pending(1, Current) ; true),
@@ -41,9 +39,6 @@ search(Current) :-
         ),
         best_pending(Next),
         update_link(Current, Next),
-        write("Next: "),
-        writeln(Next),
-        writeln("---"),
 
         search(Next)
     ).
@@ -78,8 +73,6 @@ update_pending(Direction, Current) :-
     \+ visited(Next),
     try_cost(Next, _),
     assert(pending(Next)),
-    write("P: "),
-    writeln(Next);
     true.
 
 update_link(From, To) :-

@@ -13,11 +13,9 @@ search :-
     halt.
 
 search(Current) :-
-    write("Current"),
-    writeln(Current),
     assert(visited(Current)),
     (touchdown(Current) ->
-        write_visited
+        trace_visited(Output, Count)
     ;
         between(0, 11, Direction),
         navigate(Direction, Current, Next),

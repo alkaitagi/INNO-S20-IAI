@@ -16,7 +16,7 @@ search(I, Current) :-
     I >= 0,
     assert(visited(Current)),
     (touchdown(Current) ->
-        write_visited
+        trace_visited(Output, Count)
     ;I > 0 ->
         random(0, 12, Direction),
         navigate(Direction, Current, Next),
