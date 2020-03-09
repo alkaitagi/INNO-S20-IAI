@@ -1,3 +1,4 @@
+:- consult(core/physics).
 :- consult(core/game).
 :- dynamic
     cost/2,

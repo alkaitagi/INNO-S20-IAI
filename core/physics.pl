@@ -57,4 +57,5 @@ sqr_distance([X, Y], [U, V], D) :-
     H is Y - V,
     D is W * W + H * H.
 
+
 % ----------------
