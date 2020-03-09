@@ -1,4 +1,4 @@
-:- consult(core/core).
+:- consult(core/game).
 % ---------------
 
 search :-

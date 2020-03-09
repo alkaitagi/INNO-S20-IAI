@@ -9,10 +9,14 @@
         navigate/3,
         pass_ball/2
     ]).
-
 :- use_module(core/physics).
-:- use_module(core/map).
+:- consult(core/map).
 :- dynamic
+    m/2,
+    b/2,
+    h/2,
+    o/2,
+    t/2,
     visited/1.
 
 % ----------------
