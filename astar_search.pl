@@ -23,13 +23,28 @@ search(Current) :-
         link_visited(Current),
         write_visited
     ;
+        write("Current: "),
+        writeln(Current),
         (
-            between(0, 11, Direction),
-            update_pending(Direction, Current);
-            true
+            (update_pending(0, Current) ; true),
+            (update_pending(1, Current) ; true),
+            (update_pending(2, Current) ; true),
+            (update_pending(3, Current) ; true),
+            (update_pending(4, Current) ; true),
+            (update_pending(5, Current) ; true),
+            (update_pending(6, Current) ; true),
+            (update_pending(7, Current) ; true),
+            (update_pending(8, Current) ; true),
+            (update_pending(9, Current) ; true),
+            (update_pending(10, Current) ; true),
+            (update_pending(11, Current) ; true)
         ),
         best_pending(Next),
         update_link(Current, Next),
+        write("Next: "),
+        writeln(Next),
+        writeln("---"),
+
         search(Next)
     ).
 
@@ -47,20 +62,24 @@ try_cost(Point, Cost) :-
         assert(cost(Point, Cost))
     ).
 
-% can be optimized
-% https://stackoverflow.com/questions/16349912/prolog-find-minimum-value-query
 best_pending(Point) :-
-    pending(Point),
-    try_cost(Point, Cost),
-    try_cost(_, Other),
-    Other =< Cost.
+    setof(
+        Cost-Point,
+        (
+            pending(Point),
+            try_cost(Point, Cost)
+        ),
+        [Cost-Point | _]
+    ).
 
 update_pending(Direction, Current) :-
     navigate(Direction, Current, Next),
     \+ pending(Next),
     \+ visited(Next),
     try_cost(Next, _),
-    assert(pending(Next));
+    assert(pending(Next)),
+    write("P: "),
+    writeln(Next);
     true.
 
 update_link(From, To) :-
