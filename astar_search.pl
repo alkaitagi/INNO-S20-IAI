@@ -19,6 +19,8 @@ search(Current) :-
     retract(pending(Current)),
     assert(visited(Current)),
     (touchdown(Current) ->
+        retractall(visited(_)),
+        link_visited(Current),
         write_visited
     ;
         (
@@ -64,5 +66,9 @@ update_pending(Direction, Current) :-
 update_link(From, To) :-
     retractall(link(_, To)),
     assert(link(From, To)).
+
+link_visited(Current) :-
+    (link(Previous, Current) -> link_visited(Previous) ; true),
+    assert(visited(Current)).
 
 % ---------------
