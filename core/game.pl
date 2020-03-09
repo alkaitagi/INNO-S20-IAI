@@ -54,7 +54,8 @@ alive([X, Y]) :-
 
 navigate(Direction, Current, Next) :-
     (Direction < 4 ->
-        step4(Direction, Current, Next)
+        step4(Direction, Current, Next),
+        alive(Next)
     ;
         Toss is Direction - 4,
         fly(Toss, Current, Next)

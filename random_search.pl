@@ -11,7 +11,6 @@ start :-
 
 search(I, Current) :-
     I >= 0,
-    alive(Current),
     assert(visited(Current)),
     (touchdown(Current) ->
         write_visited

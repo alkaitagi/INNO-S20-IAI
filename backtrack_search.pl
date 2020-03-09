@@ -10,7 +10,6 @@ start :-
     halt.
 
 search(Current) :-
-    alive(Current),
     assert(visited(Current)),
     (touchdown(Current) ->
         write_visited
