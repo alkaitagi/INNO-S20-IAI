@@ -20,7 +20,7 @@
 trace_visited(Output, Count) :-
     findall(Point, visited(Point), Visited),
     trace_visited(Visited, Output, Count),
-    format("~w\n~w", [Count, Output]).
+    format("~w~n~w", [Count, Output]).
 
 trace_visited([Current, [U, V] | Path], Output, Count) :-
     (sqr_distance(Current, [U, V], 1) ->
@@ -29,7 +29,7 @@ trace_visited([Current, [U, V] | Path], Output, Count) :-
         Type = 'P'
     ),
     trace_visited([[U, V] | Path], NOutput, NCount),
-    format(atom(Output), "~w ~w ~w\n~w", [Type, U, V, NOutput]),
+    format(atom(Output), "~w ~w ~w~n~w", [Type, U, V, NOutput]),
     (Type == 'H' -> Count = NCount ; succ(NCount, Count)).
 
 trace_visited([_], "", 0).

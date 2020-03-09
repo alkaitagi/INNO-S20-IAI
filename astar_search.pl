@@ -23,19 +23,9 @@ search(Current) :-
         link_visited(Current),
         trace_visited(Output, Count)
     ;
-        (
-            (update_pending(0, Current) ; true),
-            (update_pending(1, Current) ; true),
-            (update_pending(2, Current) ; true),
-            (update_pending(3, Current) ; true),
-            (update_pending(4, Current) ; true),
-            (update_pending(5, Current) ; true),
-            (update_pending(6, Current) ; true),
-            (update_pending(7, Current) ; true),
-            (update_pending(8, Current) ; true),
-            (update_pending(9, Current) ; true),
-            (update_pending(10, Current) ; true),
-            (update_pending(11, Current) ; true)
+        forall(
+            between(0, 11, Direction),
+            (update_pending(Direction, Current) ; true)
         ),
         best_pending(Next),
         update_link(Current, Next),
