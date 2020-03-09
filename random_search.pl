@@ -1,7 +1,7 @@
 :- consult(core/core).
 % ---------------
 
-start :-
+search :-
     statistics(walltime, _),
     ball(Ball),
     (search(100, Ball) -> true ; format("Could not solve~n")),

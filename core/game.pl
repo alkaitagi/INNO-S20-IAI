@@ -25,7 +25,10 @@ write_visited :-
     write_visited(Visited).
 
 write_visited([Current, [U, V] | Path]) :-
-    (sqr_distance(Current, [U, V], 1) -> true ; write('P ')),
+    (
+        sqr_distance(Current, [U, V], 1);
+        write('P ')
+    ),
     format('~w ~w~n', [U, V]),
     write_visited([[U, V] | Path]).
 

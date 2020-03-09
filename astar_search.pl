@@ -6,7 +6,7 @@
 
 % ---------------
 
-start :-
+search :-
     statistics(walltime, _),
     ball(Ball),
     assert(pending(Ball)),
