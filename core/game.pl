@@ -6,16 +6,21 @@
         alive/1,
         visited/1,
         write_visited/0,
-        navigate/3
+        navigate/3,
+        pass_ball/2
     ]).
 
 :- use_module(core/physics).
 :- use_module(core/map).
 :- dynamic
-    human/1,
     visited/1.
 
 % ----------------
+
+
+
+% ----------------
+
 
 write_visited :-
     findall(Point, visited(Point), Visited),
@@ -26,11 +31,11 @@ write_visited :-
 
 write_visited([Current, [U, V] | Path]) :-
     (sqr_distance(Current, [U, V], 1) ->
-        (\+ human([U, V]); write('H '))
+        (human(Current) -> write('H') ; write(' '))
     ;
-        write('P ')
+        write('P')
     ),
-    format('~w ~w~n', [U, V]),
+    format(' ~w ~w~n', [U, V]),
     write_visited([[U, V] | Path]).
 
 write_visited([_]).
@@ -55,6 +60,10 @@ alive([X, Y]) :-
     X=<W, Y=<H.
 
 % ---------------
+
+pass_ball([X, Y], [U, V]) :-
+    assert(h(X, Y)),
+    retract(h(U, V)).
 
 navigate(Direction, Current, Next) :-
     (Direction < 4 ->

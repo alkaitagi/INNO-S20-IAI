@@ -87,7 +87,15 @@ update_link(From, To) :-
     assert(link(From, To)).
 
 link_visited(Current) :-
-    (link(Previous, Current) -> link_visited(Previous) ; true),
+    (link(Previous, Current) ->
+        link_visited(Previous),
+        (
+            \+ human(Current);
+            pass_ball(Previous, Current)
+        )
+    ;
+        true
+    ),
     assert(visited(Current)).
 
 % ---------------
