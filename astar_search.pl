@@ -19,19 +19,15 @@ search(Current) :-
     retract(pending(Current)),
     assert(visited(Current)),
     (touchdown(Current) ->
-        write_visited,
-        !
+        write_visited
     ;
-        update_pending(Current)
-    ),
-    best_pending(Next),
-    (human(Next) ->
-        assert(human(Current)),
-        retract(human(Next)),
-        search(Next),
-        assert(human(Next)),
-        retract(human(Current))
-    ;
+        (
+            between(0, 11, Direction),
+            update_pending(Direction, Current);
+            true
+        ),
+        best_pending(Next),
+        update_link(Current, Next),
         search(Next)
     ).
 
@@ -57,16 +53,16 @@ best_pending(Point) :-
     try_cost(_, Other),
     Other =< Cost.
 
-update_pending(Current) :-
-    between(0, 12, Direction),
+update_pending(Direction, Current) :-
     navigate(Direction, Current, Next),
     \+ pending(Next),
     \+ visited(Next),
     try_cost(Next, _),
-    assert(pending(Next)).
+    assert(pending(Next));
+    true.
 
 update_link(From, To) :-
     retractall(link(_, To)),
-    link(From, To).
+    assert(link(From, To)).
 
 % ---------------
