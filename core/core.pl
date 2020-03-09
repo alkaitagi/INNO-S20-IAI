@@ -1,2 +1,2 @@
-:- use_module(core/navigation).
+:- use_module(core/game).
 :- consult(core/map).

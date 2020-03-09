@@ -1,4 +1,4 @@
-:- module(navigation, [
+:- module(game, [
         ball/1,
         human/1,
         ork/1,
@@ -6,13 +6,10 @@
         alive/1,
         visited/1,
         write_visited/0,
-        navigate/3,
-        distance/3,
-        touchdown_distance/2,
-        ball_distance/2
+        navigate/3
     ]).
 
-:- use_module(core/motion).
+:- use_module(core/physics).
 :- use_module(core/map).
 :- dynamic
     human/1,
@@ -27,10 +24,10 @@ write_visited :-
     format('~w~n', [N]),
     write_visited(Visited).
 
-write_visited([Current, [X, Y] | Path]) :-
-    (is_step(Current, [X, Y]) -> true ; write('P ')),
-    format('~w ~w~n', [X, Y]),
-    write_visited([[X, Y] | Path]).
+write_visited([Current, [U, V] | Path]) :-
+    (sqr_distance(Current, [U, V], 1) -> true ; write('P ')),
+    format('~w ~w~n', [U, V]),
+    write_visited([[U, V] | Path]).
 
 write_visited([_]).
 % ----------------
@@ -55,31 +52,18 @@ alive([X, Y]) :-
 
 % ---------------
 
-distance(X, Y, D) :-
-    D is X * X + Y * Y.
-
-touchdown_distance(X, D) :-
-    touchdown(T),
-    distance(X, T, D).
-
-ball_distance(X, D) :-
-    ball(B),
-    distance(X, B, D).
-
-% ---------------
-
 navigate(Direction, Current, Next) :-
     (Direction < 4 ->
-        step(Direction, Current, Next)
+        step4(Direction, Current, Next)
     ;
-        Throw is Direction - 4,
-        fly(Throw, Current, Next)
+        Toss is Direction - 4,
+        fly(Toss, Current, Next)
     ).
 
 fly(Direction, Current, Result) :-
     alive(Current),
     \+ human(Current),
-    toss(Direction, Current, Next),
+    step8(Direction, Current, Next),
     fly(Direction, Next, Result).
 
 fly(_, Current, Current) :-

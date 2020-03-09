@@ -1,15 +1,7 @@
-:- module(motion, [
-        up/2,
-        up_right/2,
-        right/2,
-        down_right/2,
-        down/2,
-        down_left/2,
-        left/2,
-        up_left/2,
-        step/3,
-        toss/3,
-        is_step/2
+:- module(physics, [
+        step4/3,
+        step8/3,
+        sqr_distance/3
     ]).
 
 % ----------------
@@ -44,13 +36,13 @@ up_left([X, Y], [U, V]) :-
 
 % ----------------
 
-step(Direction, Point, Result) :-
+step4(Direction, Point, Result) :-
     (Direction =:= 0 -> up(Point, Result)
     ;Direction =:= 1 -> right(Point, Result)
     ;Direction =:= 2 -> down(Point, Result)
     ;Direction =:= 3 -> left(Point, Result)).
 
-toss(Direction, Point, Result) :-
+step8(Direction, Point, Result) :-
     (Direction =:= 0 -> up(Point, Result)
     ;Direction =:= 1 -> up_right(Point, Result)
     ;Direction =:= 2 -> right(Point, Result)
@@ -60,8 +52,9 @@ toss(Direction, Point, Result) :-
     ;Direction =:= 6 -> left(Point, Result)
     ;Direction =:= 7 -> up_left(Point, Result)).
 
-is_step(From, To) :-
-    between(0, 3, Direction),
-    step(Direction, From, To).
+sqr_distance([X, Y], [U, V], D) :-
+    W is X - U,
+    H is Y - V,
+    D is W * W + H * H.
 
 % ----------------

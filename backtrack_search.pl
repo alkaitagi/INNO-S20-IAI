@@ -4,12 +4,12 @@
 start :-
     statistics(walltime, _),
     ball(Ball),
-    (move(Ball) -> true ; format("Could not solve~n")),
+    (search(Ball) -> true ; format("Could not solve~n")),
     statistics(walltime, [_ | [Time]]),
     format("~w msec~n", [Time]),
     halt.
 
-move(Current) :-
+search(Current) :-
     alive(Current),
     assert(visited(Current)),
     (touchdown(Current) ->
@@ -21,11 +21,11 @@ move(Current) :-
         (human(Next) ->
             assert(human(Current)),
             retract(human(Next)),
-            move(Next),
+            search(Next),
             assert(human(Next)),
             retract(human(Current))
         ;
-            move(Next)
+            search(Next)
         )
     ),
     retract(visited(Current)).
