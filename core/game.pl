@@ -74,12 +74,11 @@ navigate(Direction, Current, Next) :-
 
 fly(Direction, Current, Result) :-
     alive(Current),
-    \+ human(Current),
-    step8(Direction, Current, Next),
-    fly(Direction, Next, Result).
-
-fly(_, Current, Current) :-
-    alive(Current),
-    human(Current).
+    (human(Current) ->
+        Result = Current
+    ;
+        step8(Direction, Current, Next),
+        fly(Direction, Next, Result)
+    ).
 
 % ---------------
