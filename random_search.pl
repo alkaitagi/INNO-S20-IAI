@@ -34,6 +34,7 @@ search(Steps, Current) :-
     ; Steps >= 1 ->
         random(0, 12, Direction),
         navigate(Direction, Current, Next),
+        \+ visited(Next),
         (
             \+ human(Next);
             pass_ball(Current, Next)
