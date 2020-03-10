@@ -34,13 +34,16 @@ search(Steps, Current) :-
     ; Steps >= 1 ->
         random(0, 12, Direction),
         navigate(Direction, Current, Next),
-        \+ visited(Next),
-        (
-            \+ human(Next);
-            pass_ball(Current, Next)
-        ),
         succ(NSteps, Steps),
-        search(NSteps, Next)
+        (visited(Next) ->
+            search(NSteps, Current)
+        ;
+            (
+                \+ human(Next);
+                pass_ball(Current, Next)
+            ),
+            search(NSteps, Next)
+        )
     ).
 
 % ---------------
