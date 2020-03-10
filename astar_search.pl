@@ -22,8 +22,8 @@ search(Current) :-
     (touchdown(Current) ->
         retractall(visited(_)),
         link_visited(Current),
-        trace_visited(Count, Output),
-        format("~w~n~w", [Count, Output]),
+        trace_visited(Turns, Output),
+        write_visited(Turns, Output),
         !
     ;
         forall(

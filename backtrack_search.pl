@@ -8,8 +8,8 @@ search :-
     statistics(walltime, _),
     ball(Ball),
     search(Ball),
-    (best(Count, Output) ->
-        format("~w~n~w", [Count, Output])
+    (best(Turns, Output) ->
+        write_visited(Turns, Output)
     ;
         format("Could not solve~n")
     ),
@@ -20,8 +20,8 @@ search :-
 search(Current) :-
     assert(visited(Current)),
     (touchdown(Current) ->
-        trace_visited(Count, Output),
-        update_best(Count, Output)
+        trace_visited(Turns, Output),
+        update_best(Turns, Output)
     ;forall(
         between(0, 11, Direction),
         (
@@ -41,15 +41,15 @@ search(Current) :-
 
 % ---------------
 
-update_best(Count, Output) :-
-    (best(BCount, _) ->
+update_best(Turns, Output) :-
+    (best(BTurns, _) ->
         (
-            Count >= BCount;
+            Turns >= BTurns;
             retract(best(_, _)),
-            assert(best(Count, Output))
+            assert(best(Turns, Output))
         )
     ;
-        assert(best(Count, Output))
+        assert(best(Turns, Output))
     ).
 
 % ---------------

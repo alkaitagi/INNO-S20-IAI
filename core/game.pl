@@ -6,8 +6,10 @@
         alive/1,
         visited/1,
         trace_visited/2,
+        write_visited/2,
         navigate/3,
-        pass_ball/2
+        pass_ball/2,
+        reload_game/0
     ]).
 :- consult(core/motion).
 :- consult(core/map).
@@ -21,18 +23,33 @@
 
 % ----------------
 
-trace_visited(Count, Output) :-
-    findall(Point, visited(Point), Visited),
-    trace_visited(Visited, Count, Output).
+reload_game :-
+    retractall(m(_, _)),
+    retractall(b(_, _)),
+    retractall(h(_, _)),
+    retractall(o(_, _)),
+    retractall(t(_, _)),
+    retractall(visited(_)),
+    unload_file(core/map),
+    [core/map].
 
-trace_visited([Current, [U, V] | Path], Count, Output) :-
+% ----------------
+
+write_visited(Turns, Output) :-
+    format("~w turns:~n~w", [Turns, Output]).
+
+trace_visited(Turns, Output) :-
+    findall(Point, visited(Point), Visited),
+    trace_visited(Visited, Turns, Output).
+
+trace_visited([Current, [U, V] | Path], Turns, Output) :-
     (sqr_distance(Current, [U, V], 1) ->
         (human(Current) -> Type = 'H' ; Type = ' ')
     ;
         Type = 'P'
     ),
-    trace_visited([[U, V] | Path], NCount, NOutput),
-    (Type == 'H' -> Count = NCount ; succ(NCount, Count)),
+    trace_visited([[U, V] | Path], NTurns, NOutput),
+    (Type == 'H' -> Turns = NTurns ; succ(NTurns, Turns)),
     format(atom(Output), "~w ~w ~w~n~w", [Type, U, V, NOutput]).
 
 trace_visited([_], 0, "").
