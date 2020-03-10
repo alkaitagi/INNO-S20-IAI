@@ -1,4 +1,4 @@
-:- module(physics, [
+:- module(motion, [
         step4/3,
         step8/3,
         sqr_distance/3
