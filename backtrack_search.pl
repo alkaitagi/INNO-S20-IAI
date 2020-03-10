@@ -7,7 +7,7 @@
 search :-
     statistics(walltime, _),
     ball(Ball),
-    (search(Ball) ; true),
+    search(Ball),
     (best(Count, Output) ->
         format("~w~n~w", [Count, Output])
     ;
@@ -27,7 +27,6 @@ search(Current) :-
         (
             navigate(Direction, Current, Next),
             \+ visited(Next),
-            format("Moving: ~w ~w~n", [Current, Next]),
             (human(Next) ->
                 pass_ball(Current, Next),
                 search(Next),
@@ -46,13 +45,10 @@ update_best(Count, Output) :-
     (best(BCount, _) ->
         (
             Count >= BCount;
-            format("retracting~n"),
             retract(best(_, _)),
-            format("retracted~n"),
             assert(best(Count, Output))
         )
     ;
-        format("Checking: ~w~n", [Count]),
         assert(best(Count, Output))
     ).
 
