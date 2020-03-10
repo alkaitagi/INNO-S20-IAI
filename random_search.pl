@@ -6,14 +6,13 @@
 
 search :-
     statistics(walltime, _),
-    Runs = 1000,
-    Steps = 100,
     ball(Ball),
+    Runs is 1000,
     forall(
         between(1, Runs, _),
         (
             reload_game,
-            search(Steps, Ball);
+            search(Ball);
             true
         )
     ),
@@ -26,24 +25,20 @@ search :-
     format("~w msec~n", [Time]),
     halt.
 
-search(Steps, Current) :-
+search(Current) :-
     assert(visited(Current)),
     (touchdown(Current) ->
         trace_visited(Turns, Output),
         update_best(Turns, Output)
-    ; Steps >= 1 ->
+    ;
         random(0, 12, Direction),
         navigate(Direction, Current, Next),
-        succ(NSteps, Steps),
-        (visited(Next) ->
-            search(NSteps, Current)
-        ;
-            (
-                \+ human(Next);
-                pass_ball(Current, Next)
-            ),
-            search(NSteps, Next)
-        )
+        \+ visited(Next),
+        (
+            \+ human(Next);
+            pass_ball(Current, Next)
+        ),
+        search(Next)
     ).
 
 % ---------------

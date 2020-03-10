@@ -1,4 +1,5 @@
 :- module(game, [
+        map/1,
         ball/1,
         human/1,
         ork/1,
@@ -55,6 +56,9 @@ trace_visited([Current, [U, V] | Path], Turns, Output) :-
 trace_visited([_], 0, "").
 
 % ----------------
+
+map([X, Y]) :-
+    m(X, Y).
 
 ball([X, Y]) :-
     b(X, Y).
