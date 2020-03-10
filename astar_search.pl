@@ -31,8 +31,6 @@ search(Current) :-
             (update_pending(Direction, Current) ; true)
         ),
         best_pending(Next),
-        update_link(Current, Next),
-
         search(Next)
     ).
 
@@ -64,13 +62,13 @@ update_pending(Direction, Current) :-
     navigate(Direction, Current, Next),
     \+ pending(Next),
     \+ visited(Next),
+    (
+        link(_, Next);
+        assert(link(Current, Next))
+    ),
     try_cost(Next, _),
     assert(pending(Next)),
     true.
-
-update_link(From, To) :-
-    retractall(link(_, To)),
-    assert(link(From, To)).
 
 link_visited(Current) :-
     (link(Previous, Current) ->
