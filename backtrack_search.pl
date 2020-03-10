@@ -44,12 +44,13 @@ search(Current) :-
 
 update_best(Count, Output) :-
     (best(BCount, _) ->
-        format("Checking: ~w | ~w~n", [Count, BCount]),
-        Count >= BCount;
-        format("retracting~n"),
-        retract(best(_, _)),
-        format("retracted~n"),
-        assert(best(Count, Output))
+        (
+            Count >= BCount;
+            format("retracting~n"),
+            retract(best(_, _)),
+            format("retracted~n"),
+            assert(best(Count, Output))
+        )
     ;
         format("Checking: ~w~n", [Count]),
         assert(best(Count, Output))
