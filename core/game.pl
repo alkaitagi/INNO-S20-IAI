@@ -21,22 +21,21 @@
 
 % ----------------
 
-trace_visited(Output, Count) :-
+trace_visited(Count, Output) :-
     findall(Point, visited(Point), Visited),
-    trace_visited(Visited, Output, Count),
-    format("~w~n~w", [Count, Output]).
+    trace_visited(Visited, Count, Output).
 
-trace_visited([Current, [U, V] | Path], Output, Count) :-
+trace_visited([Current, [U, V] | Path], Count, Output) :-
     (sqr_distance(Current, [U, V], 1) ->
         (human(Current) -> Type = 'H' ; Type = ' ')
     ;
         Type = 'P'
     ),
-    trace_visited([[U, V] | Path], NOutput, NCount),
-    format(atom(Output), "~w ~w ~w~n~w", [Type, U, V, NOutput]),
-    (Type == 'H' -> Count = NCount ; succ(NCount, Count)).
+    trace_visited([[U, V] | Path], NCount, NOutput),
+    (Type == 'H' -> Count = NCount ; succ(NCount, Count)),
+    format(atom(Output), "~w ~w ~w~n~w", [Type, U, V, NOutput]).
 
-trace_visited([_], "", 0).
+trace_visited([_], 0, "").
 
 % ----------------
 

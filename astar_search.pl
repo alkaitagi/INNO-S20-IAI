@@ -11,7 +11,7 @@ search :-
     statistics(walltime, _),
     ball(Ball),
     assert(pending(Ball)),
-    (search(Ball) -> true ; format("Could not solve~n")),
+    (search(Ball) ; format("Could not solve~n")),
     statistics(walltime, [_ | [Time]]),
     format("~w msec~n", [Time]),
     halt.
@@ -22,7 +22,9 @@ search(Current) :-
     (touchdown(Current) ->
         retractall(visited(_)),
         link_visited(Current),
-        trace_visited(Output, Count)
+        trace_visited(Count, Output),
+        format("~w~n~w", [Count, Output]),
+        !
     ;
         forall(
             between(0, 11, Direction),
