@@ -62,9 +62,14 @@ def populate(N):
     return population
 
 
-field = 512
-diameter = 32
+source = types.SimpleNamespace()
+source.image = Image.open("image.png")
+source.pixels = source.image.load()
+
+field = 24
+diameter = 2
 areas = []
+popcount = 10
 for i in range(field // diameter):
     for j in range(field // diameter):
         p = (diameter * i, diameter * j)
@@ -72,18 +77,13 @@ for i in range(field // diameter):
 lenareas = len(areas)
 mutation = int(0.02 * lenareas)
 crosspool = int(0.5 * lenareas)
-pairs = list(itertools.combinations(range(10), 2))
-popcount = 10
-
-source = types.SimpleNamespace()
-source.image = Image.open("image.png")
-source.pixels = source.image.load()
+pairs = list(itertools.combinations(range(popcount), 2))
 
 
 population = populate(popcount)
-for _ in range(100000):
+for _ in range(1000):
     for pair in random.choices(pairs, k=crosspool):
-        child = crossover(pair[0], pair[1])
+        child = crossover(population[pair[0]], population[pair[1]])
         mutate(child)
         fit(child)
         population.append(child)
@@ -91,5 +91,5 @@ for _ in range(100000):
     population.sort(reverse=True, key=lambda x: x.fit)
     del population[popcount:]
 
-
-population[0].image.save("gen_image.png")
+    population[0].image.save("gen_image.png")
+    print("saved")
