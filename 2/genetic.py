@@ -1,7 +1,7 @@
-import itertools
 import types
 import random
 from PIL import Image, ImageDraw, ImageFont
+import copy
 
 
 def randcolor():
@@ -24,15 +24,21 @@ def draw(individual, i, color):
     # individual.pixels[areas[i][0], areas[i][1]] = color
 
 
-def fit(individual, rect=(0, 0, field, field)):
+def fit(individual, rect=None):
+    if rect == None:
+        print("-----------------")
+        rect = (0, 0, field, field)
+
     fit = 0
-    for i in range(rect[0], rect[4]):
+    for i in range(rect[0], rect[2]):
         for j in range(rect[1], rect[3]):
             iPixel = individual.pixels[i, j]
             sPixel = source.pixels[i, j]
             for c in range(3):
                 fit += (iPixel[c] - sPixel[c]) ** 2
 
+    if rect == (0, 0, field, field):
+        print("**************")
     return fit
 
 
@@ -60,7 +66,7 @@ def populate(N):
         for i in range(genelen):
             draw(individual, i, randcolor())
 
-        fit(individual)
+        individual.fit = fit(individual)
         population.append(individual)
 
     return population
@@ -73,22 +79,27 @@ source.pixels = source.image.load()
 field = source.image.size[0]
 diameter = 16
 areas = []
-popcount = 10
+popcount = 6
 for i in range(field // diameter):
     for j in range(field // diameter):
         p = (diameter * i, diameter * j)
         areas.append((p[0], p[1], p[0] + diameter, p[1] + diameter))
 
 genelen = len(areas)
-mutation = int(0.02 * genelen)
+mutation = int(0.1 * genelen)
 crosspool = int(0.5 * popcount)
-pairs = list(itertools.combinations(range(popcount), 2))
+pairs = list(range(popcount))
 
 
 population = populate(popcount)
 while True:
-    for pair in random.choices(pairs, k=crosspool):
-        child = crossover(population[pair[0]], population[pair[1]])
+    for _ in range(crosspool):
+        A = random.choice(pairs)
+        pairs.remove(A)
+        B = random.choice(pairs)
+        pairs.append(A)
+
+        child = crossover(population[A], population[B])
         mutate(child)
         population.append(child)
 
@@ -96,4 +107,4 @@ while True:
     del population[popcount:]
 
     population[0].image.save("result.png")
-    print("saved")
+    print("saved", population[0].fit)
