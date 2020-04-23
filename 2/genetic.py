@@ -10,7 +10,7 @@ def randcolor():
 
 def new():
     individual = types.SimpleNamespace()
-    individual.image = Image.new('RGB', (field, field), (255, 255, 255))
+    individual.image = Image.new('RGB', (field, field), (0, 0, 0))
     individual.pixels = individual.image.load()
     individual.draw = ImageDraw.Draw(individual.image)
     individual.genes = [None] * genelen
@@ -18,21 +18,21 @@ def new():
 
 
 def draw(individual, i, color):
+    area = areas[i]
     individual.genes[i] = color
-    individual.pixels[areas[i][0], areas[i][1]] = color
-    # individual.draw.ellipse(areas[i], color)
+    individual.draw.ellipse(area, color)
+    # individual.pixels[areas[i][0], areas[i][1]] = color
 
 
-def fit(individual):
+def fit(individual, rect=(0, 0, field, field)):
     fit = 0
-    for i in range(field):
-        for j in range(field):
+    for i in range(rect[0], rect[4]):
+        for j in range(rect[1], rect[3]):
             iPixel = individual.pixels[i, j]
             sPixel = source.pixels[i, j]
             for c in range(3):
                 fit += (iPixel[c] - sPixel[c]) ** 2
 
-    individual.fit = fit
     return fit
 
 
@@ -42,12 +42,15 @@ def crossover(A, B):
     for i in range(genelen):
         draw(individual, i, (A if i < pivot else B).genes[i])
 
+    individual.fit = fit(individual)
     return individual
 
 
 def mutate(individual):
     for i in random.choices(range(genelen), k=mutation):
+        individual.fit -= fit(individual, areas[i])
         draw(individual, i, randcolor())
+        individual.fit += fit(individual, areas[i])
 
 
 def populate(N):
@@ -68,7 +71,7 @@ source.image = Image.open("image.png")
 source.pixels = source.image.load()
 
 field = source.image.size[0]
-diameter = 1
+diameter = 16
 areas = []
 popcount = 10
 for i in range(field // diameter):
@@ -87,10 +90,9 @@ while True:
     for pair in random.choices(pairs, k=crosspool):
         child = crossover(population[pair[0]], population[pair[1]])
         mutate(child)
-        fit(child)
         population.append(child)
 
-    population.sort(reverse=True, key=lambda x: x.fit)
+    population.sort(key=lambda x: x.fit)
     del population[popcount:]
 
     population[0].image.save("result.png")
