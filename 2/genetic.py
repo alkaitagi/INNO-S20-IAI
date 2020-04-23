@@ -1,7 +1,6 @@
 import types
 import random
 from PIL import Image, ImageDraw, ImageFont
-import copy
 
 
 def randcolor():
@@ -17,16 +16,24 @@ def new():
     return individual
 
 
+def copy(original):
+    individual = types.SimpleNamespace()
+    individual.image = original.image.copy()
+    individual.pixels = individual.image.load()
+    individual.draw = ImageDraw.Draw(individual.image)
+    individual.genes = original.genes[:]
+    individual.fit = original.fit
+    return individual
+
+
 def draw(individual, i, color):
     area = areas[i]
     individual.genes[i] = color
     individual.draw.ellipse(area, color)
-    # individual.pixels[areas[i][0], areas[i][1]] = color
 
 
 def fit(individual, rect=None):
     if rect == None:
-        print("-----------------")
         rect = (0, 0, field, field)
 
     fit = 0
@@ -37,16 +44,18 @@ def fit(individual, rect=None):
             for c in range(3):
                 fit += (iPixel[c] - sPixel[c]) ** 2
 
-    if rect == (0, 0, field, field):
-        print("**************")
     return fit
 
 
 def crossover(A, B):
-    individual = new()
     pivot = random.randint(0, genelen - 1)
+    if pivot < genelen // 2:
+        A, B = B, A
+
+    individual = copy(A)
     for i in range(genelen):
-        draw(individual, i, (A if i < pivot else B).genes[i])
+        if i > pivot:
+            draw(individual, i, B.genes[i])
 
     individual.fit = fit(individual)
     return individual
@@ -77,9 +86,9 @@ source.image = Image.open("image.png")
 source.pixels = source.image.load()
 
 field = source.image.size[0]
-diameter = 16
+diameter = 32
 areas = []
-popcount = 6
+popcount = 5
 for i in range(field // diameter):
     for j in range(field // diameter):
         p = (diameter * i, diameter * j)
@@ -107,4 +116,4 @@ while True:
     del population[popcount:]
 
     population[0].image.save("result.png")
-    print("saved", population[0].fit)
+    print(population[0].fit)
