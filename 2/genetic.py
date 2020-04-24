@@ -26,7 +26,7 @@ def rgen():
     return np.random.randint(A, B, 2)
 
 
-def mutate(ind):
+def mut(ind):
     x, y, = rpnt()
     u, v = [x, y] + rgen()
 
@@ -57,7 +57,7 @@ gnr = 0
 while True:
     bst = res
     for _ in range(N):
-        ind = mutate(res.copy())
+        ind = mut(res.copy())
         if ind.fit < bst.fit:
             bst = ind
 
