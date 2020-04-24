@@ -95,7 +95,7 @@ for i in range(field // diameter):
         areas.append((p[0], p[1], p[0] + diameter, p[1] + diameter))
 
 genelen = len(areas)
-mutation = int(0.1 * genelen)
+mutation = int(0.01 * genelen)
 crosspool = int(0.5 * popcount)
 pairs = list(range(popcount))
 
