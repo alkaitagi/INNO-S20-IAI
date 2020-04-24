@@ -1,35 +1,18 @@
 import types
 import random
-from PIL import Image, ImageDraw, ImageFont
+import cv2
+import numpy as np
 
 
 def randcolor():
     return tuple(random.randint(0, 255) for _ in range(3))
 
 
-def new():
-    individual = types.SimpleNamespace()
-    individual.image = Image.new('RGB', (field, field), (0, 0, 0))
-    individual.pixels = individual.image.load()
-    individual.draw = ImageDraw.Draw(individual.image)
-    individual.genes = [None] * genelen
-    return individual
-
-
-def copy(original):
-    individual = types.SimpleNamespace()
-    individual.image = original.image.copy()
-    individual.pixels = individual.image.load()
-    individual.draw = ImageDraw.Draw(individual.image)
-    individual.genes = original.genes[:]
-    individual.fit = original.fit
-    return individual
-
-
 def draw(individual, i, color):
-    area = areas[i]
+    radius = diameter // 2
+    individual.image = cv2.circle(
+        individual.image, (areas[i][0] + radius, areas[i][1] + radius), radius, color, -1)
     individual.genes[i] = color
-    individual.draw.ellipse(area, color)
 
 
 def fit(individual, rect=None):
@@ -39,8 +22,8 @@ def fit(individual, rect=None):
     fit = 0
     for i in range(rect[0], rect[2]):
         for j in range(rect[1], rect[3]):
-            iPixel = individual.pixels[i, j]
-            sPixel = source.pixels[i, j]
+            iPixel = individual.image[i, j]
+            sPixel = source[i, j]
             for c in range(3):
                 fit += (iPixel[c] - sPixel[c]) ** 2
 
@@ -52,7 +35,9 @@ def crossover(A, B):
     if pivot < genelen // 2:
         A, B = B, A
 
-    individual = copy(A)
+    individual = types.SimpleNamespace()
+    individual.image = A.image.copy()
+    individual.genes = A.genes[:]
     for i in range(genelen):
         if i > pivot:
             draw(individual, i, B.genes[i])
@@ -71,7 +56,9 @@ def mutate(individual):
 def populate(N):
     population = []
     for _ in range(N):
-        individual = new()
+        individual = types.SimpleNamespace()
+        individual.image = np.zeros((field, field, 3))
+        individual.genes = [None] * genelen
         for i in range(genelen):
             draw(individual, i, randcolor())
 
@@ -81,22 +68,19 @@ def populate(N):
     return population
 
 
-source = types.SimpleNamespace()
-source.image = Image.open("image.png")
-source.pixels = source.image.load()
-
-field = source.image.size[0]
-diameter = 32
+source = cv2.imread("test.png")
+field = source.shape[0]
+diameter = 4
 areas = []
-popcount = 5
+popcount = 10
 for i in range(field // diameter):
     for j in range(field // diameter):
         p = (diameter * i, diameter * j)
         areas.append((p[0], p[1], p[0] + diameter, p[1] + diameter))
 
 genelen = len(areas)
-mutation = int(0.01 * genelen)
-crosspool = int(0.5 * popcount)
+mutation = int(0.02 * genelen)
+crosspool = int(0.25 * popcount)
 pairs = list(range(popcount))
 
 
@@ -115,5 +99,5 @@ while True:
     population.sort(key=lambda x: x.fit)
     del population[popcount:]
 
-    population[0].image.save("result.png")
+    cv2.imwrite("result.png", population[0].image)
     print(population[0].fit)
