@@ -4,19 +4,19 @@ import cv2
 import numpy as np
 
 
-def randcolor():
-    return np.round(255 * np.random.rand(1, 3))
+def randcolor(neg=False):
+    scl = np.random.rand(3) if neg else np.random.uniform(-1, 1, 3)
+    return np.round(255 * scl)
 
 
 def draw(ind, i, color):
     ind.gns[i] = color
-
-    # radius = diameter // 2
-    # individual.image = cv2.circle(
-    #     individual.image, (areas[i][0] + radius, areas[i][1] + radius), radius, color, -1)
-
     x1, y1, x2, y2 = areas[i]
-    ind.img[x1:x2, y1:y2] = color
+
+    r = diameter // 2
+    ind.img = cv2.circle(ind.img, (x1 + r, y1 + r), r, color, -1)
+
+    # ind.img[x1:x2, y1:y2] = color
 
 
 def fit(ind, rect=None):
@@ -38,9 +38,8 @@ def crossover(A, B):
     ind = types.SimpleNamespace()
     ind.img = A.img.copy()
     ind.gns = A.gns[:]
-    for i in range(genelen):
-        if i > pivot:
-            draw(ind, i, B.gns[i])
+    for i in range(pivot, genelen):
+        draw(ind, i, B.gns[i])
 
     ind.fit = fit(ind)
     return ind
@@ -50,9 +49,7 @@ def mutate(ind):
     for i in random.choices(range(genelen), k=mutation):
         ind.fit -= fit(ind, areas[i])
 
-        color = np.random.uniform(-1, 1, 3)
-        color = np.multiply(color, randcolor())
-        color = np.add(ind.gns[i], color)
+        color = np.add(randcolor(True), ind.gns[i])
         color = np.clip(color, 0, 255)
         draw(ind, i, color)
 
@@ -107,7 +104,6 @@ while True:
 
     pop.sort(key=lambda x: x.fit)
     del pop[popcount:]
-
 
     if gnr % 10 == 0:
         print(gnr, ": ", pop[0].fit)
