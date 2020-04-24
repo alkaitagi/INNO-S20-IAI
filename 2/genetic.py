@@ -41,14 +41,14 @@ def fit(img, x, y, u, v):
     return np.sum(np.absolute(np.subtract(img[x:u, y:v], src[x:u, y:v])))
 
 
-src = cv2.imread("test.png")
+src = cv2.imread("source.png")
 
 # image size
 S = src.shape[0]
 # population
 N = 50
 # rect side range
-A, B = 2, 4
+A, B = 5, 15
 
 res = Ind(np.ones((S, S, 3)))
 res.fit = fit(res.img, 0, 0, S, S)
