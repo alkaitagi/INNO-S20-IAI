@@ -38,7 +38,7 @@ def mut(ind):
 
 
 def fit(img, x, y, u, v):
-    return np.sum(np.square(np.subtract(img[x:u, y:v], src[x:u, y:v])))
+    return np.sum(np.absolute(np.subtract(img[x:u, y:v], src[x:u, y:v])))
 
 
 src = cv2.imread("test.png")
