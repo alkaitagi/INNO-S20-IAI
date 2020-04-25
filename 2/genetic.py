@@ -6,52 +6,53 @@ class Ind:
     img = None
     fit = 0
 
-    def __init__(self, img=None, fit=0):
-        self.img = img
-        self.fit = fit
-
     def copy(self):
-        return Ind(self.img.copy(), self.fit)
+        ind = Ind()
+        ind.img = self.img.copy()
+        ind.fit = self.fit
+        return ind
 
 
-def rclr():
-    return np.random.randint(0, 255, 3)
-
-
-def rpnt():
-    return np.random.randint(0, S, 2)
-
-
-def rgen():
-    return np.random.randint(A, B, 2)
+def line(x, y, rot, rad):
+    a, b = int(rad * np.cos(rot)), int(rad * np.sin(rot))
+    return (x + a, y + b), (x - a, y - b)
 
 
 def mut(ind):
-    x, y, = rpnt()
-    u, v = [x, y] + rgen()
+    x = np.random.randint(0, H)
+    y = np.random.randint(0, W)
 
-    ind.fit -= fit(ind.img, x, y, u, v)
-    ind.img[x:u, y:v] = rclr()
-    ind.fit += fit(ind.img, x, y, u, v)
+    lng = T * np.random.randint(L[0], L[1])
+    rot = np.random.choice([-.25, 0, .25, .5]) * np.pi
+    col = [np.random.randint(0, 255) for _ in range(3)]
+
+    ind.fit -= fit(ind.img, x - lng, y - lng, x + lng, y + lng)
+    p1, p2 = line(x, y, rot, lng)
+    cv2.line(ind.img, p1, p2, col, T)
+    ind.fit += fit(ind.img, x - lng, y - lng, x + lng, y + lng)
 
     return ind
 
 
 def fit(img, x, y, u, v):
-    return np.sum(np.absolute(np.subtract(img[x:u, y:v], src[x:u, y:v])))
+    return np.sum(np.absolute(np.subtract(img[y:v, x:u], src[y:v, x:u])))
 
 
 src = cv2.imread("source.png")
 
+# radius range
+L = (4, 16)
 # image size
-S = src.shape[0]
+W, H = src.shape[:2]
+# thichkness
+T = 2
 # population
-N = 50
-# rect side range
-A, B = 5, 15
+N = 5
 
-res = Ind(np.ones((S, S, 3)))
-res.fit = fit(res.img, 0, 0, S, S)
+res = Ind()
+res.img = 255 * np.ones((W, H, 3))
+res.fit = fit(res.img, 0, 0, W, H)
+
 
 gnr = 0
 while True:
@@ -64,6 +65,6 @@ while True:
     res = bst
     gnr += 1
 
-    if not gnr % 10:
+    if not gnr % 100:
         print(gnr, ": ", res.fit)
         cv2.imwrite("result.png", res.img)
