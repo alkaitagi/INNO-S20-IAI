@@ -20,7 +20,8 @@ def rclr():
 
 
 def rrot():
-    return 0 if np.random.rand() < .5 else .5 * np.pi
+    return (-1 if np.random.rand() < .5 else 1) * .25 * np.pi
+    # return 0 if np.random.rand() < .5 else .5 * np.pi
 
 
 def line(x, y, rot, rad):
@@ -29,8 +30,8 @@ def line(x, y, rot, rad):
 
 
 def mut(ind):
-    x = np.random.randint(0, W)
-    y = np.random.randint(0, H)
+    x = G * np.random.randint(0, W // G)
+    y = np.random.randint(0, H // G)
 
     l = np.random.randint(L[0], L[1])
     r = rrot()
