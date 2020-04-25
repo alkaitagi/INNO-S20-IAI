@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from scipy.spatial import Delaunay
 
 
 class Ind:
@@ -81,6 +82,19 @@ src = cv2.imread("mona.png")
 S = src.shape[0]
 # population
 N = 50
+
+pnts = []
+for _ in range(50):
+    pnts.append(rpnt())
+pnts = np.array(pnts)
+tri = Delaunay(pnts)
+
+img = np.ones((S, S, 3))
+for t in pnts[tri.simplices]:
+    img = cv2.drawContours(img, [t], 0, rclr(), -1)
+cv2.imwrite("result.png", img)
+print("done")
+input()
 
 res = Ind(np.ones((S, S, 3)))
 res.fit = fit(res.img, 0, 0, S, S)
