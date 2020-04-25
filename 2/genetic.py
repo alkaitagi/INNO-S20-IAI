@@ -5,7 +5,6 @@ import numpy as np
 class Ind:
     img = None
     fit = 0
-    last = None
 
     def copy(self):
         ind = Ind()
@@ -23,10 +22,8 @@ def rrot():
 
 
 def mut(ind):
-    x, y = C * np.random.randint(0, G, 2)
-    u, v = (x + C, y+C)
-
-    ind.last = [x, y]
+    x, y = C * np.random.randint(0, S, 2)
+    u, v = x + C, y + C
 
     # rot = rrot()
     # x, y = int(C * np.cos(rot)), int(C * np.sin(rot))
@@ -35,7 +32,7 @@ def mut(ind):
     # p2 = (pnt[0] - x, pnt[1] - y)
 
     ind.fit -= fit(ind.img, x, y, u, v)
-    ind.img[x:u, y:v] = rclr()
+    ind.img = cv2.rectangle(ind.img, (x,y), (u,v), rclr(), -1)
     ind.fit += fit(ind.img, x, y, u, v)
 
     return ind
@@ -73,5 +70,5 @@ while True:
     gnr += 1
 
     if not gnr % 10:
-        print(gnr, ": ", res.fit, res.last)
+        print(gnr, ": ", res.fit)
         cv2.imwrite("result.png", res.img)
