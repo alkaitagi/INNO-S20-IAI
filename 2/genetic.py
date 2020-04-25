@@ -20,8 +20,8 @@ def rclr():
 
 
 def rrot():
-    return (-1 if np.random.rand() < .5 else 1) * .25 * np.pi
-    # return 0 if np.random.rand() < .5 else .5 * np.pi
+    # return (-1 if np.random.rand() < .5 else 1) * .25 * np.pi
+    return 0 if np.random.rand() < .5 else .5 * np.pi
 
 
 def line(x, y, rot, rad):
@@ -30,8 +30,8 @@ def line(x, y, rot, rad):
 
 
 def mut(ind):
-    x = G * np.random.randint(0, W // G)
-    y = np.random.randint(0, H // G)
+    x = np.random.randint(0, W)
+    y = np.random.randint(0, H)
 
     l = np.random.randint(L[0], L[1])
     r = rrot()
@@ -50,7 +50,7 @@ def fit(img, x, y, u, v):
     return np.sum(np.absolute(np.subtract(img[y:v, x:u], src[y:v, x:u])))
 
 
-src = cv2.imread(r"C:\Users\alkaitagi\Projects\INNO-S20-IAI\2\small.png")
+src = cv2.imread(r"C:\Users\alkaitagi\Projects\INNO-S20-IAI\2\imam.png")
 
 # radius range
 L = (2, 8)
