@@ -23,7 +23,7 @@ def mut(ind):
     y = np.random.randint(0, W)
 
     lng = T * np.random.randint(L[0], L[1])
-    rot = np.random.choice([-.25, 0, .25, .5])
+    rot = np.random.choice([-.25, 0, .25, .5]) * np.pi
     col = [np.random.randint(0, 255) for _ in range(3)]
 
     ind.fit -= fit(ind.img, x - lng, y - lng, x + lng, y + lng)
@@ -41,13 +41,13 @@ def fit(img, x, y, u, v):
 src = cv2.imread("source.png")
 
 # radius range
-L = (4, 12)
+L = (4, 24)
 # image size
 W, H = src.shape[:2]
 # thichkness
 T = 2
 # population
-N = 50
+N = 10
 
 res = Ind()
 res.img = 255 * np.ones((W, H, 3))
