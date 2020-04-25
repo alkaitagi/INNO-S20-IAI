@@ -33,10 +33,10 @@ def mut(ind):
 
     ind.fit -= fit(ind.img, x, y, u, v)
 
-    l = np.random
-    p1, p2 = line(x + Ch, y + Ch, 0, C + 1)
+    l = np.random.randint(1, C)
+    p1, p2 = line(x + Ch, y + Ch, 0, l + 1)
     cv2.line(ind.img, p1, p2, (255, 255, 255), 1)
-    p1, p2 = line(x + Ch, y + Ch, 0, C)
+    p1, p2 = line(x + Ch, y + Ch, 0, l)
     cv2.line(ind.img, p1, p2, rclr(), 1)
 
     ind.fit += fit(ind.img, x, y, u, v)
@@ -53,7 +53,7 @@ src = cv2.imread("mona.png")
 # image size
 S = src.shape[0]
 # cell size
-C = 2
+C = 4
 Ch = C // 2
 # grid size
 G = S // C
@@ -76,6 +76,6 @@ while True:
     res = bst
     gnr += 1
 
-    if not gnr % 100:
+    if not gnr % 1:
         print(gnr, ": ", res.fit)
         cv2.imwrite("result.png", res.img)
