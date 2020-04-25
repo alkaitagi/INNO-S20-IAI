@@ -29,9 +29,9 @@ def mut(ind):
     x = T // 2 + T * np.random.randint(0, W // T)
 
     lng = T * np.random.randint(L[0], L[1])
-    # rot = np.random.choice([-.25, 0, .25, .5])
-    rot = np.random.choice([0, .5])
-    col = [np.random.randint(0, 255) for _ in range(3)]
+    rot = np.random.choice([-.25, 0, .25, .5])
+    # col = [np.random.randint(0, 256) for _ in range(3)]
+    col = [np.random.randint(0, 256)] * 3
 
     b, a, d, c = line(y, x, rot, lng)
 
@@ -50,7 +50,7 @@ def fit(img, b, a, d, c):
     a, c = np.sort(np.clip([a, c], 0, W))
     if a == c:
         c += 1
-        
+
     return np.sum(np.absolute(np.subtract(img[b:d, a:c], src[b:d, a:c])))
 
 
