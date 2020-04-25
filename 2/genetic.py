@@ -44,13 +44,18 @@ def mut(ind):
 
 def fit(img, b, a, d, c):
     b, d = np.sort(np.clip([b, d], 0, H))
+    if b == d:
+        d += 1
+
     a, c = np.sort(np.clip([a, c], 0, W))
-    print(b, a, d, c)
+    if a == c:
+        c += 1
+        
     return np.sum(np.absolute(np.subtract(img[b:d, a:c], src[b:d, a:c])))
 
 
 # source image
-src = cv2.imread("mona.png")
+src = cv2.imread(r"C:\Users\alkaitagi\Projects\INNO-S20-IAI\2\mona.png")
 # image size
 H, W = src.shape[:2]
 # stoke radius range (ratio to thickness)
