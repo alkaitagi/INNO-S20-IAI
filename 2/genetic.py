@@ -22,7 +22,7 @@ def rrot():
 
 
 def mut(ind):
-    x, y = C * np.random.randint(0, S, 2)
+    x, y = C * np.random.randint(0, G, 2)
     u, v = x + C, y + C
 
     # rot = rrot()
@@ -32,7 +32,7 @@ def mut(ind):
     # p2 = (pnt[0] - x, pnt[1] - y)
 
     ind.fit -= fit(ind.img, x, y, u, v)
-    ind.img = cv2.rectangle(ind.img, (x,y), (u,v), rclr(), -1)
+    cv2.rectangle(ind.img, (x, y), (u, v), rclr(), -1)
     ind.fit += fit(ind.img, x, y, u, v)
 
     return ind
@@ -42,7 +42,7 @@ def fit(img, x, y, u, v):
     return np.sum(np.absolute(np.subtract(img[x:u, y:v], src[x:u, y:v])))
 
 
-src = cv2.imread("mona.png")
+src = cv2.imread(r"C:\Users\alkaitagi\Projects\INNO-S20-IAI\2\mona.png")
 
 # image size
 S = src.shape[0]
