@@ -14,14 +14,15 @@ class Ind:
 
 
 def rclr():
-    c = np.random.randint(0, 256)
-    return (c, c, c)
-    # return [np.random.randint(0, 255) for _ in range(3)]
+    # c = np.random.randint(0, 256)
+    # return (c, c, c)
+    return [np.random.randint(0, 255) for _ in range(3)]
 
 
 def rrot():
-    # return (-1 if np.random.rand() < .5 else 1) * .25 * np.pi
-    return 0 if np.random.rand() < .5 else .5 * np.pi
+    return (-1 if np.random.rand() < .5 else 1) * .25 * np.pi
+    # return 0 if np.random.rand() < .5 else .5 * np.pi
+    # return np.random.uniform(-.5, .5) * np.pi
 
 
 def line(x, y, rot, rad):
@@ -30,8 +31,8 @@ def line(x, y, rot, rad):
 
 
 def mut(ind):
-    x = np.random.randint(0, W)
-    y = np.random.randint(0, H)
+    x = np.random.randint(0, H)
+    y = np.random.randint(0, W)
 
     l = np.random.randint(L[0], L[1])
     r = rrot()
@@ -53,13 +54,11 @@ def fit(img, x, y, u, v):
 src = cv2.imread(r"C:\Users\alkaitagi\Projects\INNO-S20-IAI\2\imam.png")
 
 # radius range
-L = (2, 8)
+L = (5, 20)
 # image size
 W, H = src.shape[:2]
 # gap
 G = 2
-# grid size
-R, C = W // G, H // G
 # population
 N = 50
 
