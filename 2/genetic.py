@@ -24,19 +24,28 @@ def line(y, x, rot, lng):
         return y + lng, x - lng, y - lng, x + lng
 
 
+def rlng():
+    return T * np.random.randint(4, 13)
+
+
+def rclr():
+    return [np.random.randint(0, 256) for _ in range(3)]
+    # return [np.random.randint(0, 256)] * 3
+
+
+def rrot():
+    # return np.random.choice([-.25, 0, .25, .5])
+    return np.random.choice([-.25, .25])
+
+
 def mut(ind):
     y = T // 2 + T * np.random.randint(0, H // T)
     x = T // 2 + T * np.random.randint(0, W // T)
 
-    lng = T * np.random.randint(L[0], L[1])
-    rot = np.random.choice([-.25, 0, .25, .5])
-    # col = [np.random.randint(0, 256) for _ in range(3)]
-    col = [np.random.randint(0, 256)] * 3
-
-    b, a, d, c = line(y, x, rot, lng)
+    b, a, d, c = line(y, x, rrot(), rlng())
 
     ind.fit -= fit(ind.img, b, a, d, c)
-    cv2.line(ind.img, (a, b), (c, d), col, T)
+    cv2.line(ind.img, (a, b), (c, d), rclr(), T)
     ind.fit += fit(ind.img, b, a, d, c)
 
     return ind
@@ -45,25 +54,23 @@ def mut(ind):
 def fit(img, b, a, d, c):
     b, d = np.sort(np.clip([b, d], 0, H))
     if b == d:
-        d += 1
+        d += T
 
     a, c = np.sort(np.clip([a, c], 0, W))
     if a == c:
-        c += 1
+        c += T
 
     return np.sum(np.absolute(np.subtract(img[b:d, a:c], src[b:d, a:c])))
 
 
 # source image
-src = cv2.imread(r"C:\Users\alkaitagi\Projects\INNO-S20-IAI\2\mona.png")
+src = cv2.imread("source.png")
 # image size
 H, W = src.shape[:2]
-# stoke radius range (ratio to thickness)
-L = (2, 4)
 # stroke thickness
-T = 1
+T = 2
 # variants population
-N = 5
+N = 15
 
 
 res = Ind()
