@@ -25,7 +25,7 @@ def line(y, x, rot, lng):
 
 
 def rlng():
-    return T * np.random.randint(4, 13)
+    return T * np.random.randint(2, 13)
 
 
 def rclr():
