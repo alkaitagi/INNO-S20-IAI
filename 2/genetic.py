@@ -13,22 +13,29 @@ class Ind:
         return ind
 
 
-def line(x, y, rot, rad):
-    a, b = int(rad * np.cos(rot)), int(rad * np.sin(rot))
-    return (x + a, y + b), (x - a, y - b)
+def line(x, y, rot, lng):
+    if not rot:
+        return (x - lng, y), (x + lng, y)
+    elif rot == .5:
+        return (x, y - lng), (x, y + lng)
+    elif rot == .25:
+        return (x - lng, y - lng), (x + lng, y + lng)
+    else:
+        return (x - lng, y + lng), (x + lng, y - lng)
+        
 
 
 def mut(ind):
-    x = np.random.randint(0, H)
-    y = np.random.randint(0, W)
+    x = T // 2 + T * np.random.randint(0, H // T)
+    y = T // 2 + T * np.random.randint(0, W // T)
 
     lng = T * np.random.randint(L[0], L[1])
-    rot = np.random.choice([-.25, 0, .25, .5]) * np.pi
+    rot = np.random.choice([-.25, 0, .25, .5])
     col = [np.random.randint(0, 255) for _ in range(3)]
+    pt1, pt2 = line(x, y, rot, lng)
 
     ind.fit -= fit(ind.img, x - lng, y - lng, x + lng, y + lng)
-    p1, p2 = line(x, y, rot, lng)
-    cv2.line(ind.img, p1, p2, col, T)
+    cv2.line(ind.img, pt1, pt2, col, T)
     ind.fit += fit(ind.img, x - lng, y - lng, x + lng, y + lng)
 
     return ind
@@ -41,13 +48,14 @@ def fit(img, x, y, u, v):
 src = cv2.imread("source.png")
 
 # radius range
-L = (4, 16)
+L = (4, 12)
 # image size
 W, H = src.shape[:2]
-# thichkness
+# thickness
 T = 2
 # population
-N = 5
+N = 1
+
 
 res = Ind()
 res.img = 255 * np.ones((W, H, 3))
