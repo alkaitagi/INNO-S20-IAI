@@ -41,13 +41,13 @@ def fit(img, x, y, u, v):
 src = cv2.imread("source.png")
 
 # radius range
-L = (12, 24)
+L = (4, 16)
 # image size
 W, H = src.shape[:2]
 # thichkness
 T = 2
 # population
-N = 10
+N = 5
 
 res = Ind()
 res.img = 255 * np.ones((W, H, 3))
