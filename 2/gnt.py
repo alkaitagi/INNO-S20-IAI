@@ -86,7 +86,7 @@ def fit(img, T, b, a, d, c):
 
 
 # source image
-src = cv2.imread("mona.png")
+src = cv2.imread("src.png")
 # image size
 H, W = src.shape[:2]
 # configuration
@@ -102,8 +102,6 @@ while True:
     bst = rsl
     for _ in range(cnf.ppl):
         ind = mut(rsl.cln())
-        # cv2.imwrite("rsl.png", ind.img)
-        # input()
         if ind.fit < bst.fit:
             bst = ind.cln()
 

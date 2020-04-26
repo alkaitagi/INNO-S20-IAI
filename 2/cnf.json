@@ -1,14 +1,14 @@
 {
     "clr": true,
-    "axi": true,
+    "axi": false,
     "dgn": true,
     "thk": [
         2,
         2
     ],
     "lng": [
-        2,
-        10
+        4,
+        12
     ],
     "ppl": 5
 }
