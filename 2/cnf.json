@@ -1,0 +1,14 @@
+{
+    "clr": true,
+    "axi": true,
+    "dgn": true,
+    "thk": [
+        2,
+        2
+    ],
+    "lng": [
+        2,
+        10
+    ],
+    "ppl": 5
+}
